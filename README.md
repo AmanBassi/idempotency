@@ -1,4 +1,5 @@
 Idempotency Payment Service
+
 This is a simple Spring Boot application that demonstrates how to implement an idempotent payment service. Idempotency is a crucial concept in distributed systems, ensuring that repeated requests have the same effect as a single request. This is particularly important for financial transactions to prevent duplicate payments caused by network issues or client retries.
 
 The project uses MongoDB for data persistence and a combination of an atomic database operation (findAndModify) and a unique key to handle concurrent requests and prevent race conditions.
@@ -32,6 +33,7 @@ Request Body:
   "currency": "USD"
 }
 
+
 Response:
 
 Returns the idempotencyKey that the client should use for the subsequent confirm request.
@@ -49,6 +51,7 @@ Request Body:
   "amount": 100.0,
   "currency": "USD"
 }
+
 
 Response:
 
@@ -74,9 +77,11 @@ Clone the Repository:
 git clone <your-repository-url>
 cd idempotency-service
 
+
 Run the Application:
 
 ./mvnw spring-boot:run
+
 
 The application will start on http://localhost:8080.
 
@@ -89,11 +94,13 @@ curl -X POST http://localhost:8080/api/payments/session \
 -H "Content-Type: application/json" \
 -d '{"amount":10.50, "currency":"USD"}'
 
+
 Step 2: Confirm the payment using the returned key.
 
 curl -X POST http://localhost:8080/api/payments/confirm \
 -H "Idempotency-Key: <paste_the_key_here>" \
 -H "Content-Type: application/json" \
 -d '{"amount":10.50, "currency":"USD"}'
+
 
 Step 3: Test Idempotency: Repeat the confirm request with the same Idempotency-Key to see that it returns the same response without processing a duplicate payment.
